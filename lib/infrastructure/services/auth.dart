@@ -62,6 +62,9 @@ class AuthService {
 
       if (response.statusCode == 200) {
         return body['token'];
+        // user.token = body['token'];
+        // print(user.toJson());
+        // return user;
       } else {
         return 'error';
       }

@@ -4,11 +4,11 @@
 
 import 'dart:convert';
 
-TaskModel taskModelFromJson(String str) => TaskModel.fromJson(json.decode(str));
+TodoModel todoModelFromJson(String str) => TodoModel.fromJson(json.decode(str));
 
-String taskModelToJson(TaskModel data) => json.encode(data.toJson());
+String todoModelToJson(TodoModel data) => json.encode(data.toJson());
 
-class TaskModel {
+class TodoModel {
   String? id;
   String? description;
   bool? complete;
@@ -16,7 +16,7 @@ class TaskModel {
   String? createdAt;
   String? updatedAt;
 
-  TaskModel({
+  TodoModel({
     this.id,
     this.description,
     this.complete,
@@ -25,7 +25,7 @@ class TaskModel {
     this.updatedAt,
   });
 
-  factory TaskModel.fromJson(Map<String, dynamic> json) => TaskModel(
+  factory TodoModel.fromJson(Map<String, dynamic> json) => TodoModel(
     id: json["_id"],
     description: json["description"],
     complete: json["complete"],

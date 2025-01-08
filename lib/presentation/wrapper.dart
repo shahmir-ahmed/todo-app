@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/application/shared_prefs.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/application/shared_prefs_helper.dart';
+import 'package:todo_app/application/user_provider.dart';
 import 'package:todo_app/configurations/frontend_configs.dart';
+import 'package:todo_app/infrastructure/services/user.dart';
 import 'package:todo_app/presentation/views/auth/login/login_view.dart';
 import 'package:todo_app/presentation/views/home/home_view.dart';
 
@@ -18,9 +22,17 @@ class _WrapperState extends State<Wrapper> {
     final token = await SharedPrefsHelper().getToken();
     // print('token: $token');
     if (token != null) {
-      setState(() {
-        _loggedIn = true;
+      // get user profile
+      await UserServices().getProfile(token).then((val){
+        // print('val: ${val.toJson()}');
+        if(val!=null){
+          Provider.of<UserProvider>(context, listen: false).saveUser(val);
+          setState(() {
+            _loggedIn = true;
+          });
+        }
       });
+
     } else {
       setState(() {
         _loggedIn = false;
@@ -40,9 +52,15 @@ class _WrapperState extends State<Wrapper> {
     // print('shopId: $shopId');
     return _loggedIn == null
         ? Scaffold(
-            body: SizedBox(
+            body: Container(
+              color: FrontendConfigs.kAppPrimaryColor,
               height: MediaQuery.of(context).size.height,
-              child: const Center(child: Text('Loading...')),
+              child: const Center(child: //Text('Loading app...')
+              SpinKitDoubleBounce(
+                color: Colors.white,
+                size: 50.0,
+              )
+              ),
             ),
             backgroundColor: FrontendConfigs.whiteColor,
           )
